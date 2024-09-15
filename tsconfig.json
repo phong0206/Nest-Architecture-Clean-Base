@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "noUnusedLocals": false,
-    "module": "ESNext",
+    "module": "commonjs",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ESNext",
+    "target": "ES2021",
     "moduleResolution": "Node",
     "sourceMap": true,
     "outDir": "./dist",
