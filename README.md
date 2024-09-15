@@ -76,7 +76,7 @@ Flow Request
 #### 1. Clone repository
 
 ```console
-git clone git@git.hblab.vn:hb3/tateyamakagaku/emergency-box-be.git
+git clone https://github.com/phong0206/Nest-Architecture-Clean-Base
 ```
 
 #### 2. Copy `.env.example` to `.env`
