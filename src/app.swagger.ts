@@ -21,7 +21,7 @@ export async function useSwagger(app: INestApplication) {
   //   }),
   // );
   // const en = await import(join(entitiesPath, '/admin.entity.ts'));
-  // console.log(123, en);
+  console.log(123);
   const config = new DocumentBuilder().setTitle(title).setVersion(version).addBearerAuth().build();
   const document = SwaggerModule.createDocument(app, config, {
     // extraModels: extraModels.flat(),
