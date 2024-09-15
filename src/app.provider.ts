@@ -1,0 +1,31 @@
+import { ClassSerializerInterceptor, Provider } from '@nestjs/common';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { ResponseInterceptor } from './infrastructure/common/interceptors/response.interceptor';
+import { AllExceptionFilter } from './infrastructure/common/filter/exception.filter';
+import { LoggerService } from './infrastructure/logger/logger.service';
+import { JwtAuthGuard } from './infrastructure/common/guards/jwtAuth.guard';
+import { JwtRefreshTokenStrategy, JwtStrategy, LocalStrategy, TrimStringsPipe } from '@common';
+
+export const providers: Provider[] = [
+  LocalStrategy,
+  JwtStrategy,
+  JwtRefreshTokenStrategy,
+  JwtAuthGuard,
+  {
+    provide: APP_PIPE,
+    useClass: TrimStringsPipe,
+  },
+  {
+    provide: APP_INTERCEPTOR,
+    useClass: ClassSerializerInterceptor,
+  },
+  {
+    provide: APP_INTERCEPTOR,
+    useClass: ResponseInterceptor,
+  },
+  {
+    provide: APP_FILTER,
+    useFactory: (loggerService: LoggerService) => new AllExceptionFilter(loggerService),
+    inject: [LoggerService],
+  },
+];

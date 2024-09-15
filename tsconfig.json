@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "noUnusedLocals": false,
+    "module": "ESNext",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
+    "moduleResolution": "Node",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "resolveJsonModule": true,
+    "paths": {
+      "@common": ["src/infrastructure/common"],
+      "@config": ["src/infrastructure/config"],
+      "@entity/*": ["src/infrastructure/entities/*"],
+      "@repository/*": ["src/domain/repositories/*"],
+      "@usecase/*": ["src/usecases/*"]
+    }
+  }
+}
