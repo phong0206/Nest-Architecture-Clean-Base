@@ -20,8 +20,8 @@ export async function useSwagger(app: INestApplication) {
   //     return entityModule.default || entityModule;
   //   }),
   // );
-  const en = await import(join(entitiesPath, '/admin.entity.ts'));
-  console.log(123, en);
+  // const en = await import(join(entitiesPath, '/admin.entity.ts'));
+  // console.log(123, en);
   const config = new DocumentBuilder().setTitle(title).setVersion(version).addBearerAuth().build();
   const document = SwaggerModule.createDocument(app, config, {
     // extraModels: extraModels.flat(),
