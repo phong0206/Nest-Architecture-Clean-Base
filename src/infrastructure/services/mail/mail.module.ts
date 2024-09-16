@@ -1,14 +1,14 @@
 import { EnvironmentConfigService } from '@config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module, Global } from '@nestjs/common';
-import * as AWS from 'aws-sdk';
+import { SESClient } from "@aws-sdk/client-ses"; 
 import { IMailService } from './mail.interface';
 import { MailService } from './mail.service';
 
 export const getMailerConfigSES = (configService: EnvironmentConfigService) => {
   return {
     transport: {
-      SES: new AWS.SES({
+      SES: new SESClient({
         region: configService.getSESRegion(),
       }),
     },
