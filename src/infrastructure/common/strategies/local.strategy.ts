@@ -5,13 +5,10 @@ import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module'
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 import { LoggerService } from '../../logger/logger.service';
 import { ExceptionsService } from '../../exceptions/exceptions.service';
-import { LoginUseCases } from '@usecase/auth/login.usecases';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(
-    @Inject('LoginUseCasesProxy')
-    private readonly loginUsecaseProxy: UseCaseProxy<LoginUseCases>,
     private readonly logger: LoggerService,
     private readonly exceptionService: ExceptionsService,
   ) {
