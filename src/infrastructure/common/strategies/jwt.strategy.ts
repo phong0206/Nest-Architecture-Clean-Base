@@ -6,13 +6,10 @@ import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module'
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 import { ExceptionsService } from '../../exceptions/exceptions.service';
 import { LoggerService } from '../../logger/logger.service';
-import { LoginUseCases } from '@usecase/auth/login.usecases';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    @Inject('LoginUseCasesProxy')
-    private readonly loginUsecaseProxy: UseCaseProxy<LoginUseCases>,
     private readonly logger: LoggerService,
     private readonly exceptionService: ExceptionsService,
   ) {
@@ -27,13 +24,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    const user = this.loginUsecaseProxy.getInstance().validateUserForJWTStragtegy(payload.username);
-    if (!user) {
-      this.logger.warn('JwtStrategy', `User not found`);
-      this.exceptionService.unauthorizedException({
-        message: 'User not found',
-      });
-    }
-    return user;
+    // const user = this.loginUsecaseProxy.getInstance().validateUserForJWTStragtegy(payload.username);
+    // if (!user) {
+    //   this.logger.warn('JwtStrategy', `User not found`);
+    //   this.exceptionService.unauthorizedException({
+    //     message: 'User not found',
+    //   });
+    // }
+    // return user;
   }
 }

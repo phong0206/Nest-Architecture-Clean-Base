@@ -7,14 +7,11 @@ import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module'
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 import { LoggerService } from '../../logger/logger.service';
 import { ExceptionsService } from '../../exceptions/exceptions.service';
-import { LoginUseCases } from '@usecase/auth/login.usecases';
 
 @Injectable()
 export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-refresh-token') {
   constructor(
     private readonly configService: EnvironmentConfigService,
-    @Inject('LoginUseCasesProxy')
-    private readonly loginUsecaseProxy: UseCaseProxy<LoginUseCases>,
     private readonly logger: LoggerService,
     private readonly exceptionService: ExceptionsService,
   ) {
@@ -30,14 +27,14 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-ref
   }
 
   async validate(request: Request, payload: any) {
-    const refreshToken = request.cookies?.Refresh;
-    const user = this.loginUsecaseProxy.getInstance().getUserIfRefreshTokenMatches(refreshToken, payload.username);
-    if (!user) {
-      this.logger.warn('JwtStrategy', `User not found or hash not correct`);
-      this.exceptionService.unauthorizedException({
-        message: 'User not found or hash not correct',
-      });
-    }
-    return user;
+    // const refreshToken = request.cookies?.Refresh;
+    // const user = this.loginUsecaseProxy.getInstance().getUserIfRefreshTokenMatches(refreshToken, payload.username);
+    // if (!user) {
+    //   this.logger.warn('JwtStrategy', `User not found or hash not correct`);
+    //   this.exceptionService.unauthorizedException({
+    //     message: 'User not found or hash not correct',
+    //   });
+    // }
+    // return user;
   }
 }

@@ -13,10 +13,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 
-export const ApiResponseType = <TModel extends Type<any>>(
-  model: TModel,
-  isArray: boolean,
-) => {
+export const ApiResponseType = <TModel extends Type<any>>(model: TModel, isArray: boolean) => {
   return applyDecorators(
     ApiOkResponse({
       isArray: isArray,
@@ -40,11 +37,7 @@ export const ApiResponseType = <TModel extends Type<any>>(
   );
 };
 
-function getApiResponseOptions(
-  description: string,
-  dtoOrSchema: any,
-  isArray = false,
-): ApiResponseOptions {
+function getApiResponseOptions(description: string, dtoOrSchema: any, isArray = false): ApiResponseOptions {
   if (typeof dtoOrSchema === 'function') {
     return { description, type: dtoOrSchema, isArray };
   } else {
@@ -121,9 +114,7 @@ export const getPaginationSchema = ($ref: any, status = 200) => {
 export const ApiCreate = ($ref: any, name: string) =>
   applyDecorators(
     ApiOperation({ summary: 'Create a new ' + name }),
-    ApiCreatedResponse(
-      getApiResponseOptions('Create a new ' + name + ' successfully', $ref),
-    ),
+    ApiCreatedResponse(getApiResponseOptions('Create a new ' + name + ' successfully', $ref)),
     ApiBadRequestResponse({
       description: 'Wrong data type or missing data in body',
     }),
@@ -141,9 +132,7 @@ export const ApiCreate = ($ref: any, name: string) =>
 export const ApiGetAll = ($ref: any, name: string) =>
   applyDecorators(
     ApiOperation({ summary: 'Get list ' + name }),
-    ApiOkResponse(
-      getApiResponseOptions('Get list ' + name + ' successfully', $ref, true),
-    ),
+    ApiOkResponse(getApiResponseOptions('Get list ' + name + ' successfully', $ref, true)),
   );
 
 /**
@@ -155,9 +144,7 @@ export const ApiGetAll = ($ref: any, name: string) =>
 export const ApiGetOne = ($ref: any, name: string) =>
   applyDecorators(
     ApiOperation({ summary: 'Get detail a ' + name }),
-    ApiOkResponse(
-      getApiResponseOptions('Get detail a ' + name + ' successfully', $ref),
-    ),
+    ApiOkResponse(getApiResponseOptions('Get detail a ' + name + ' successfully', $ref)),
     ApiNotFoundResponse({ description: 'Not found ' + name }),
   );
 
@@ -191,15 +178,36 @@ export const ApiDelete = (name: string) =>
   );
 
 /**
+ * Swagger login
+ * @param userType Loại người dùng
+ * @example ApiLogin('user')
+ */
+export const ApiLogin = (userType: string) =>
+  applyDecorators(
+    ApiOperation({ summary: `Login ${userType}` }),
+    ApiOkResponse({
+      schema: {
+        properties: {
+          ...getBaseProperties(200),
+          data: {
+            properties: {
+              accessToken: { example: 'string' },
+              refreshToken: { example: 'string' },
+            },
+          },
+        },
+      },
+    }),
+  );
+
+/**
  * Swagger hide controller in production
  * @example ApiHideController()
  */
-export const ApiHideController = () =>
-  applyDecorators(ApiExcludeController(process.env.NODE_ENV === 'production'));
+export const ApiHideController = () => applyDecorators(ApiExcludeController(process.env.NODE_ENV === 'production'));
 
 /**
  * Swagger for controller
  * @example ApiController()
  */
-export const ApiController = (name: string) =>
-  applyDecorators(ApiHideController(), ApiTags(`${name} API`));
+export const ApiController = (name: string) => applyDecorators(ApiHideController(), ApiTags(`${name} API`));
