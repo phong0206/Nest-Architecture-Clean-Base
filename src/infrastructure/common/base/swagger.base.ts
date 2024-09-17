@@ -1,10 +1,9 @@
-import { JwtAuthGuard, ResponseInterceptor } from '@common';
-import { applyDecorators, CanActivate, Controller, Post, Provider, Type, UseGuards } from '@nestjs/common';
+import { ResponseInterceptor } from '@common';
+import { applyDecorators, CanActivate, Controller, Post, Type, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
-  ApiBodyOptions,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiExcludeController,

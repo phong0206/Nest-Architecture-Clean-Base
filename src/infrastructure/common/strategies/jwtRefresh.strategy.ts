@@ -26,7 +26,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-ref
   async validate(request: Request, payload: any) {
     const user = await this.authUsecasesProxy.getInstance().validateUserForJWTStrategy(payload.email);
     const refreshToken = request.headers['authorization'].replace('Bearer ', '');
-    if (!user || payload.type!== 'user' || user.refresh_token !== refreshToken) {
+    if (!user || payload.type !== 'user' || user.refresh_token !== refreshToken) {
       this.logger.warn('JwtStrategy', `User not found`);
       this.exceptionService.unauthorizedException({ message: 'Your login session has expired.' });
     }

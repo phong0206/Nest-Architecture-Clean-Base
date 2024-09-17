@@ -1,11 +1,5 @@
 import { BaseEntity } from './base.entity';
-import {
-  DeepPartial,
-  DeleteResult,
-  FindOptionsWhere,
-  SelectQueryBuilder,
-  UpdateResult,
-} from 'typeorm';
+import { DeepPartial, DeleteResult, FindOptionsWhere, SelectQueryBuilder, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 /**
@@ -49,10 +43,7 @@ export abstract class AbstractBaseService<T extends BaseEntity> {
    * @returns Promise<T | null>
    * @example service.getOneById('uuid', { where: { name: 'John Doe' } })
    */
-  abstract getOneById(
-    id: number,
-    options?: Partial<FindOptions<T>>,
-  ): Promise<T | null>;
+  abstract getOneById(id: number, options?: Partial<FindOptions<T>>): Promise<T | null>;
   /**
    * get a record by id, if not found record, return error NotFound
    * @param id Id of record
@@ -60,10 +51,7 @@ export abstract class AbstractBaseService<T extends BaseEntity> {
    * @returns Promise<T>
    * @example service.getOneByIdOrFail('uuid', { where: { name: 'John Doe' } })
    */
-  abstract getOneByIdOrFail(
-    id: number,
-    options?: Partial<FindOrFailOptions<T>>,
-  ): Promise<T>;
+  abstract getOneByIdOrFail(id: number, options?: Partial<FindOrFailOptions<T>>): Promise<T>;
 
   /**
    * Get all records
@@ -78,9 +66,7 @@ export abstract class AbstractBaseService<T extends BaseEntity> {
    * @returns Promise<IPaginationResponse<T>>
    * @example service.getAllPaginated({ where: { name: 'John Doe' }, limit: '10', page: '1' })
    */
-  abstract getAllPaginated(
-    options?: FindPaginatedOptions<T>,
-  ): Promise<IPaginationResponse<T>>;
+  abstract getAllPaginated(options?: FindPaginatedOptions<T>): Promise<IPaginationResponse<T>>;
 
   /**
    * update a record, if not found record, return error NotFound
@@ -89,10 +75,7 @@ export abstract class AbstractBaseService<T extends BaseEntity> {
    * @returns Promise<T>
    * @example service.update({ where: { name: 'John Doe' } }, { name: 'Jane Doe updated' })
    */
-  abstract update(
-    options: FindOrFailOptions<T>,
-    data: QueryDeepPartialEntity<T>,
-  ): Promise<T>;
+  abstract update(options: FindOrFailOptions<T>, data: QueryDeepPartialEntity<T>): Promise<T>;
   /**
    * update a record by id, if not found record, return error NotFound
    * @param id Id of record
@@ -101,11 +84,7 @@ export abstract class AbstractBaseService<T extends BaseEntity> {
    * @returns Promise<T>
    * @example service.updateById('uuid', { name: 'Jane Doe updated' }, { loadEagerRelations: false, errorMessage: 'Not found' } })
    */
-  abstract updateById(
-    id: number,
-    data: QueryDeepPartialEntity<T>,
-    options?: Partial<FindOrFailOptions<T>>,
-  ): Promise<T>;
+  abstract updateById(id: number, data: QueryDeepPartialEntity<T>, options?: Partial<FindOrFailOptions<T>>): Promise<T>;
 
   /**
    * remove record, if not found record, return error NotFound
@@ -121,10 +100,7 @@ export abstract class AbstractBaseService<T extends BaseEntity> {
    * @returns Promise<T>
    * @example service.removeById('uuid', { loadEagerRelations: false, errorMessage: 'Not found' } })
    */
-  abstract removeById(
-    id: number,
-    options?: Partial<FindOrFailOptions<T>>,
-  ): Promise<T>;
+  abstract removeById(id: number, options?: Partial<FindOrFailOptions<T>>): Promise<T>;
 
   /**
    * remove all record
@@ -156,10 +132,7 @@ export abstract class AbstractBaseService<T extends BaseEntity> {
    * @returns Promise<T>
    * @example service.softRemoveById('uuid', { loadEagerRelations: false, errorMessage: 'Not found' } })
    */
-  abstract softRemoveById(
-    id: number,
-    options?: Partial<FindOrFailOptions<T>>,
-  ): Promise<T>;
+  abstract softRemoveById(id: number, options?: Partial<FindOrFailOptions<T>>): Promise<T>;
 
   /**
    * soft remove all record
@@ -186,11 +159,7 @@ export abstract class AbstractBaseService<T extends BaseEntity> {
    * @returns Promise<UpdateResult>
    * @example service.increment({ where: { name: 'John Doe' } }, 'age', 1)
    */
-  abstract increment(
-    where: FindOptionsWhere<T>,
-    field: string,
-    value: number,
-  ): Promise<UpdateResult>;
+  abstract increment(where: FindOptionsWhere<T>, field: string, value: number): Promise<UpdateResult>;
   /**
    * Decrement
    * @param where option to get record
@@ -199,11 +168,7 @@ export abstract class AbstractBaseService<T extends BaseEntity> {
    * @returns Promise<UpdateResult>
    * @example service.decrement({ where: { name: 'John Doe' } }, 'age', 1)
    */
-  abstract decrement(
-    where: FindOptionsWhere<T>,
-    field: string,
-    value: number,
-  ): Promise<UpdateResult>;
+  abstract decrement(where: FindOptionsWhere<T>, field: string, value: number): Promise<UpdateResult>;
   /**
    * Get a record or create new record
    * @param options option to get record
@@ -211,8 +176,5 @@ export abstract class AbstractBaseService<T extends BaseEntity> {
    * @returns Promise<T>
    * @example service.getOneOrCreate({ where: { name: 'John Doe' } }, { name: 'John Doe' })
    */
-  abstract getOneOrCreate(
-    options: FindOptions<T>,
-    data?: DeepPartial<T>,
-  ): Promise<T>;
+  abstract getOneOrCreate(options: FindOptions<T>, data?: DeepPartial<T>): Promise<T>;
 }
