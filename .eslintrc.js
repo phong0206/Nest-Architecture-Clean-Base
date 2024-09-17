@@ -26,5 +26,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ["warn", { "argsIgnorePattern": "^_" }],
     "function-paren-newline": ["error", "consistent"],
     "eol-last": ["error", "always"],
+    'function-paren-newline': 'off',
+    '@typescript-eslint/ban-types': 'off'
   },
 };

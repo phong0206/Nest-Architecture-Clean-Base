@@ -1,9 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { DynamicModule, forwardRef, Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 
 import { ExceptionsModule } from '../exceptions/exceptions.module';
 import { LoggerModule } from '../logger/logger.module';
-import { LoggerService } from '../logger/logger.service';
 
 import { BcryptModule } from '../services/bcrypt/bcrypt.module';
 import { BcryptService } from '../services/bcrypt/bcrypt.service';

@@ -3,7 +3,6 @@ import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } fr
 import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 import SMTPConnection from 'nodemailer/lib/smtp-connection';
-import { IMailService } from 'src/infrastructure/services/mail/mail.interface';
 import { MailService } from 'src/infrastructure/services/mail/mail.service';
 
 @Processor(EMAIL_SENDING_QUEUE)
