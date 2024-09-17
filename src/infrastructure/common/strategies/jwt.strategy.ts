@@ -18,12 +18,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.JWT_SECRET,
-      passReqToCallback: true
+      passReqToCallback: true,
     });
   }
 
   async validate(@Req() request: any, payload: any) {
-    console.log(123, payload)
+    console.log(123, payload);
     const user = await this.authUsecasesProxy.getInstance().validateUserForJWTStrategy(payload.email);
     const accessToken = request.headers['authorization'].replace('Bearer ', '');
     if (!user || payload.type !== 'user' || user.access_token !== accessToken) {

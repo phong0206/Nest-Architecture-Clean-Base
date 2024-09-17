@@ -30,6 +30,7 @@
   "dependencies": {
     "@aws-sdk/client-ses": "^3.651.1",
     "@nestjs-modules/mailer": "^2.0.2",
+    "@nestjs/bull": "^10.2.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.2",
     "@nestjs/core": "^10.0.0",

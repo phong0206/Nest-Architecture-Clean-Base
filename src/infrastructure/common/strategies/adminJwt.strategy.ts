@@ -1,7 +1,6 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable, Req } from '@nestjs/common';
-import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 import { ExceptionsService } from '../../exceptions/exceptions.service';
 import { LoggerService } from '../../logger/logger.service';
@@ -18,12 +17,12 @@ export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.JWT_SECRET,
-      passReqToCallback: true
+      passReqToCallback: true,
     });
   }
 
   async validate(@Req() request: any, payload: any) {
-    console.log(payload)
+    console.log(payload);
     const admin = await this.authUsecasesProxy.getInstance().validateAdminForJWTStrategy(payload.email);
     const accessToken = request.headers['authorization'].replace('Bearer ', '');
     if (!admin || payload.type !== 'admin' || admin.access_token !== accessToken) {

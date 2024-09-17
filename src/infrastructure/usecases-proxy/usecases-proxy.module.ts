@@ -18,9 +18,18 @@ import { EnvironmentConfigModule, EnvironmentConfigService } from '@config';
 import { ExceptionsService } from '../exceptions/exceptions.service';
 import { DatabaseAdminRepository } from '../repositories/admin.repository';
 import { AuthUsecases } from '@usecase/auth.usecases';
+import { QueueModule } from '../config/queue/queue.module';
 
 @Module({
-  imports: [LoggerModule, JwtModule, BcryptModule, EnvironmentConfigModule, RepositoriesModule, ExceptionsModule],
+  imports: [
+    LoggerModule,
+    JwtModule,
+    BcryptModule,
+    EnvironmentConfigModule,
+    RepositoriesModule,
+    ExceptionsModule,
+    QueueModule,
+  ],
 })
 export class UsecasesProxyModule {
   static AUTH_USECASES_PROXY = 'AuthUsecasesProxy';

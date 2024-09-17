@@ -1,5 +1,3 @@
-import { Admin } from '@entity/admin.entity';
-import { User } from '@entity/user.entity';
 import { INestApplication, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
