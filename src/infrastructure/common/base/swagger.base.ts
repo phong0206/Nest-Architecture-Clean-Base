@@ -1,10 +1,14 @@
-import { ResponseInterceptor } from '@common';
-import { applyDecorators, Type } from '@nestjs/common';
+import { JwtAuthGuard, ResponseInterceptor } from '@common';
+import { applyDecorators, CanActivate, Controller, Post, Provider, Type, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiBodyOptions,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiExcludeController,
+  ApiExtraModels,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -38,6 +42,9 @@ export const ApiResponseType = <TModel extends Type<any>>(model: TModel, isArray
 };
 
 function getApiResponseOptions(description: string, dtoOrSchema: any, isArray = false): ApiResponseOptions {
+  if (!dtoOrSchema) {
+    return { description };
+  }
   if (typeof dtoOrSchema === 'function') {
     return { description, type: dtoOrSchema, isArray };
   } else {
@@ -83,7 +90,7 @@ export const getPaginationProperties = () => {
   };
 };
 
-export const getBaseSchema = ($ref: any, status = 200) => {
+export const getBaseSchema = ($ref: string | Function, status = 200) => {
   return {
     properties: {
       ...getBaseProperties(status),
@@ -179,11 +186,13 @@ export const ApiDelete = (name: string) =>
 
 /**
  * Swagger login
- * @param userType Loại người dùng
+ * @param userType Type user
  * @example ApiLogin('user')
  */
-export const ApiLogin = (userType: string) =>
+export const ApiLogin = (userType: string, dto: Type<unknown> | Function | [Function] | string) =>
   applyDecorators(
+    Post(`${userType}/login`),
+    ApiBody({ type: dto }),
     ApiOperation({ summary: `Login ${userType}` }),
     ApiOkResponse({
       schema: {
@@ -201,6 +210,33 @@ export const ApiLogin = (userType: string) =>
   );
 
 /**
+ * Swagger login
+ * @param userType Type user
+ * @example ApiLogin('user')
+ */
+export const ApiSignUp = (dto: Type<unknown> | Function | [Function] | string) =>
+  applyDecorators(
+    Post('user/signup'),
+    ApiBody({ type: dto }),
+    ApiOperation({ summary: `Sign up user` }),
+    ApiOkResponse({ description: 'Sign up successfully.' }),
+  );
+
+/**
+ * Swagger logout
+ * @param userType Type user
+ * @example ApiLogout('user')
+ */
+export const ApiLogout = (userType: string, typeGuard: Function | CanActivate) =>
+  applyDecorators(
+    Post(`${userType}/logout`),
+    UseGuards(typeGuard),
+    ApiBearerAuth(),
+    ApiOperation({ summary: `Logout ${userType}` }),
+    ApiOkResponse({ description: 'Logout successfully' }),
+  );
+
+/**
  * Swagger hide controller in production
  * @example ApiHideController()
  */
@@ -210,4 +246,5 @@ export const ApiHideController = () => applyDecorators(ApiExcludeController(proc
  * Swagger for controller
  * @example ApiController()
  */
-export const ApiController = (name: string) => applyDecorators(ApiHideController(), ApiTags(`${name} API`));
+export const ApiController = (name: string, $ref: Function[]) =>
+  applyDecorators(ApiHideController(), ApiTags(`${name} API`), Controller('name'), ApiExtraModels(...$ref));

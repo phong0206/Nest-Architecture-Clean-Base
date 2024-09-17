@@ -65,8 +65,34 @@ export class AuthUsecases {
     const { email } = input;
     const existsUser = await this.userRepository.getOne({ where: { email } });
     if (existsUser) this.exceptionsService.badRequestException({ message: 'User already exists.' });
-    input.password = await this.bcryptService.hash(input.password);
     return this.userRepository.create(input);
+  }
+
+  async resetPassword(password: string, email: string) {
+    console.log(email);
+    const user = await this.userRepository.getOneOrFail({ where: { email } });
+    user.password = await this.bcryptService.hash(password);
+    return user.save();
+  }
+
+  async refreshTokenUser(email: string): Promise<{ accessToken: string }> {
+    const accessToken = await this.getCookieWithJwtToken(email, 'user');
+    await this.userRepository.update({ where: { email } }, { access_token: accessToken });
+    return { accessToken };
+  }
+
+  async refreshTokenAdmin(email: string): Promise<{ accessToken: string }> {
+    const accessToken = await this.getCookieWithJwtToken(email, 'admin');
+    await this.adminRepository.update({ where: { email } }, { access_token: accessToken });
+    return { accessToken };
+  }
+
+  async validateUserForJWTStrategy(email: string): Promise<User> {
+    return this.userRepository.getOne({ where: { email } });
+  }
+
+  async validateAdminForJWTStrategy(email: string): Promise<Admin> {
+    return this.adminRepository.getOne({ where: { email } });
   }
 
   private async getCookieWithJwtToken(email: string, typeLogin: string) {

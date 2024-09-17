@@ -37,3 +37,11 @@ export class AuthSignupDto {
   @MinLength(3)
   readonly name: string;
 }
+
+export class ResetPasswordDto {
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(8)
+  password: string;
+}

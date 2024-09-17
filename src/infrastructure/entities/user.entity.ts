@@ -17,10 +17,10 @@ export class User extends BaseEntity {
   @Column('varchar', { length: 255 })
   email!: string;
 
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, nullable: true })
   refresh_token!: string;
 
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, nullable: true })
   access_token!: string;
 
   @BeforeInsert()

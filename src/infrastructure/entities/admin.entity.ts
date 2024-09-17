@@ -17,11 +17,11 @@ export class Admin extends BaseEntity {
   @Column('varchar', { length: 255 })
   email!: string;
 
-  @Column('varchar', { length: 255 })
-  refresh_token!: string;
+  @Column('varchar', { length: 255, nullable: true })
+  refresh_token: string;
 
-  @Column('varchar', { length: 255 })
-  access_token!: string;
+  @Column('varchar', { length: 255, nullable: true })
+  access_token: string;
 
   @BeforeInsert()
   async beforeInsert() {
