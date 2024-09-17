@@ -23,7 +23,9 @@
     "migration:run": "npm run typeorm migration:run -- --d src/infrastructure/config/typeorm/typeorm.config.ts",
     "migration:generate": "npm run typeorm -- --d src/infrastructure/config/typeorm/typeorm.config.ts migration:generate ./database/migrations/$npm_config_name",
     "migration:create": "npm run typeorm -- migration:create ./database/migrations/$npm_config_name",
-    "migration:revert": "npm run typeorm -- --d src/infrastructure/config/typeorm/typeorm.config.ts migration:revert"
+    "migration:revert": "npm run typeorm -- --d src/infrastructure/config/typeorm/typeorm.config.ts migration:revert",
+    "migration:seed": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d src/infrastructure/config/typeorm/typeorm.config.ts",
+    "migration:seed-bastion": "npm run build && ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d src/infrastructure/config/typeorm/typeorm.config.ts"
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.651.1",
@@ -56,7 +58,8 @@
     "pg": "^8.11.5",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "typeorm-extension": "^3.6.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

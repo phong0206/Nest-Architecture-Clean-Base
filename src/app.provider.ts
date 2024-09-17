@@ -3,14 +3,19 @@ import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ResponseInterceptor } from './infrastructure/common/interceptors/response.interceptor';
 import { AllExceptionFilter } from './infrastructure/common/filter/exception.filter';
 import { LoggerService } from './infrastructure/logger/logger.service';
-import { JwtAuthGuard } from './infrastructure/common/guards/jwtAuth.guard';
-import { JwtRefreshTokenStrategy, JwtStrategy, LocalStrategy, TrimStringsPipe } from '@common';
+import {
+  AdminJwtRefreshTokenStrategy,
+  AdminJwtStrategy,
+  JwtRefreshTokenStrategy,
+  JwtStrategy,
+  TrimStringsPipe,
+} from '@common';
 
 export const providers: Provider[] = [
-  LocalStrategy,
   JwtStrategy,
+  AdminJwtStrategy,
+  AdminJwtRefreshTokenStrategy,
   JwtRefreshTokenStrategy,
-  JwtAuthGuard,
   {
     provide: APP_PIPE,
     useClass: TrimStringsPipe,

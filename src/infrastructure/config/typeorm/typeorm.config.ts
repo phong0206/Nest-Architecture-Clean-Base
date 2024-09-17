@@ -20,6 +20,8 @@ export function getConfig() {
     extra: {
       connectionLimit: 3,
     },
+    seeds: ['database/seeds/**/*{.ts,.js}'],
+    seedTracking: true,
   } as DataSourceOptions;
 }
 
