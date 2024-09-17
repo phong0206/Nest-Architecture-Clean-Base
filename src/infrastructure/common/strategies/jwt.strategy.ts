@@ -1,7 +1,6 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable, Req } from '@nestjs/common';
-import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 import { ExceptionsService } from '../../exceptions/exceptions.service';
 import { LoggerService } from '../../logger/logger.service';

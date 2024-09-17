@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post, Req, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthLoginDto, AuthSignupDto, ResetPasswordDto } from './auth-dto.class';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
