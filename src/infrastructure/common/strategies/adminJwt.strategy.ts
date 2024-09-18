@@ -7,7 +7,7 @@ import { LoggerService } from '../../logger/logger.service';
 import { AuthUsecases } from '@usecase/auth.usecases';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
   constructor(
     @Inject('AuthUsecasesProxy')
     private readonly authUsecasesProxy: UseCaseProxy<AuthUsecases>,
@@ -22,13 +22,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(@Req() request: any, payload: any) {
-    console.log(123, payload);
-    const user = await this.authUsecasesProxy.getInstance().validateUserForJWTStrategy(payload.email);
+    console.log(payload);
+    const admin = await this.authUsecasesProxy.getInstance().validateAdminForJWTStrategy(payload.email);
     const accessToken = request.headers['authorization'].replace('Bearer ', '');
-    if (!user || payload.type !== 'user' || user.access_token !== accessToken) {
-      this.logger.warn('JwtStrategy', `User not found`);
+    if (!admin || payload.type !== 'admin' || admin.access_token !== accessToken) {
+      this.logger.warn('JwtStrategy', `Admin not found`);
       this.exceptionService.unauthorizedException({ message: 'Your login session has expired.' });
     }
-    return user;
+    return admin;
   }
 }

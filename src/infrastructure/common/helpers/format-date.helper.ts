@@ -20,11 +20,7 @@ export function parseShortDate(date: string | undefined | null) {
   const [day, month] = date.split('-');
   // Create a new Date object
   const currentDate = new Date();
-  const result = new Date(
-    currentDate.getFullYear(),
-    parseInt(month, 10) - 1,
-    parseInt(day, 10),
-  );
+  const result = new Date(currentDate.getFullYear(), parseInt(month, 10) - 1, parseInt(day, 10));
   result.setUTCHours(0, 0, 0, 0);
   return result;
 }
@@ -48,28 +44,12 @@ export function daysInMonth(year: number, month: number) {
 }
 
 export function dateDiff(first: Date, second: Date) {
-  return Math.round(
-    (second.getTime() - first.getTime()) / (1000 * 60 * 60 * 24),
-  );
+  return Math.round((second.getTime() - first.getTime()) / (1000 * 60 * 60 * 24));
 }
 
 export function getNow() {
   const now = new Date();
-  const startOfDate = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    0,
-    0,
-    0,
-  );
-  const endOfDate = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    23,
-    59,
-    59,
-  );
+  const startOfDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+  const endOfDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
   return { startOfDate, endOfDate };
 }

@@ -1,13 +1,16 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { useSwagger } from './app.swagger';
 
 async function bootstrap() {
-  const env = process.env.NODE_ENV;
-  const app = await NestFactory.create(AppModule);
+  const logger = new Logger('Bootstrap');
 
+  const env = process.env.NODE_ENV;
+  const app = await NestFactory.create(AppModule, {
+    logger: ['error', 'debug', 'verbose', 'warn'],
+  });
   app.enableCors({
     origin: true,
     credentials: true,
@@ -26,7 +29,12 @@ async function bootstrap() {
     await useSwagger(app);
   }
 
-  await app.listen(3000);
+  await app.listen(3000).then(async () => {
+    const url = await app.getUrl();
+    logger.debug(`Your app is running on port ${3000}`);
+    logger.debug(`Environment: ${env}`);
+    logger.debug(`Documentation ${url}/api`);
+  });
 }
 
 bootstrap();

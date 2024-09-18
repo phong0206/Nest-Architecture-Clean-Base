@@ -1,20 +1,31 @@
-import { EnvironmentConfigService } from '@config';
+import { EnvironmentConfigModule, EnvironmentConfigService } from '@config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module, Global } from '@nestjs/common';
-import * as AWS from 'aws-sdk';
+import { SESClient } from '@aws-sdk/client-ses';
 import { IMailService } from './mail.interface';
 import { MailService } from './mail.service';
+import { ExceptionsModule } from 'src/infrastructure/exceptions/exceptions.module';
+import { LoggerModule } from 'src/infrastructure/logger/logger.module';
 
 export const getMailerConfigSES = (configService: EnvironmentConfigService) => {
+  const regionSES = configService.getSESRegion();
+
+  const defaults = { from: configService.getMailFrom() };
+
+  if (regionSES) {
+    return {
+      transport: { SES: { ses: new SESClient({ region: regionSES }) } },
+      defaults,
+    };
+  }
+
   return {
     transport: {
-      SES: new AWS.SES({
-        region: configService.getSESRegion(),
-      }),
+      host: configService.getHostMailer(),
+      port: configService.getPortMailer(),
+      secure: configService.getPortMailer() === 465, // Direct comparison is clearer
     },
-    defaults: {
-      from: configService.getMailFrom(),
-    },
+    defaults,
   };
 };
 
@@ -28,11 +39,14 @@ export const getMailerConfigSES = (configService: EnvironmentConfigService) => {
   ],
   imports: [
     MailerModule.forRootAsync({
+      imports: [EnvironmentConfigModule],
       inject: [EnvironmentConfigService],
       useFactory: (configService: EnvironmentConfigService) => {
         return getMailerConfigSES(configService);
       },
     }),
+    ExceptionsModule,
+    LoggerModule,
   ],
   exports: [IMailService],
 })

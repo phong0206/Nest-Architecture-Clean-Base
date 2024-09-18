@@ -17,7 +17,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    "prettier/prettier": ["error", { "endOfLine": "off" }],
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -26,5 +26,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ["warn", { "argsIgnorePattern": "^_" }],
     "function-paren-newline": ["error", "consistent"],
     "eol-last": ["error", "always"],
+    'function-paren-newline': 'off',
+    '@typescript-eslint/ban-types': 'off'
   },
 };

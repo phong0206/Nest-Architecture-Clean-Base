@@ -3,11 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { DatabaseConfig } from '../../../domain/config/database.interface';
 import { JWTConfig } from '../../../domain/config/jwt.interface';
 import { StorageConfig } from 'src/domain/config/storage.interface';
+import { RedisConfig } from 'src/domain/config/redis.interface';
 
 @Injectable()
-export class EnvironmentConfigService
-  implements DatabaseConfig, JWTConfig, StorageConfig
-{
+export class EnvironmentConfigService implements DatabaseConfig, JWTConfig, StorageConfig, RedisConfig {
   constructor(private configService: ConfigService) {}
 
   //env jwt
@@ -104,5 +103,22 @@ export class EnvironmentConfigService
 
   getMailFrom(): string {
     return this.configService.get<string>('NODEMAILER_FROM');
+  }
+
+  //env redis config
+  getRedisHost(): string {
+    return this.configService.get<string>('REDIS_HOST');
+  }
+
+  getRedisPort(): number {
+    return this.configService.get<number>('REDIS_PORT');
+  }
+
+  getRedisPassword(): string {
+    return this.configService.get<string>('REDIS_PASSWORD');
+  }
+
+  getRedisPrefix(): string {
+    return this.configService.get<string>('REDIS_PREFIX');
   }
 }

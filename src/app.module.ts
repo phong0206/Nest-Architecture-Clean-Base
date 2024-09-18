@@ -12,6 +12,7 @@ import { join } from 'path';
 import { CustomStorageModule } from './infrastructure/nest-storage/storage.module';
 import { EnvironmentConfigModule, storageConfig } from '@config';
 import { providers } from './app.provider';
+import { QueueModule } from './infrastructure/config/queue/queue.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { providers } from './app.provider';
     JwtServiceModule,
     EnvironmentConfigModule,
     CustomStorageModule.register(storageConfig()),
+    QueueModule,
   ],
   providers,
 })

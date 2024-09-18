@@ -1,5 +1,3 @@
-import { Admin } from '@entity/admin.entity';
-import { User } from '@entity/user.entity';
 import { INestApplication, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
@@ -10,11 +8,8 @@ export async function useSwagger(app: INestApplication) {
   const title = 'Nest Architecture Clean Base';
   const version = '1.0';
 
-  const extraModels = [User, Admin];
   const config = new DocumentBuilder().setTitle(title).setVersion(version).addBearerAuth().build();
-  const document = SwaggerModule.createDocument(app, config, {
-    extraModels,
-  });
+  const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup(path, app, document, {
     swaggerOptions: {

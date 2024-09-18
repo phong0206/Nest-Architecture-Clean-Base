@@ -1,13 +1,14 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Inject, Injectable, Req } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { Request } from 'express';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
-import { ExceptionsService } from '../../exceptions/exceptions.service';
 import { LoggerService } from '../../logger/logger.service';
+import { ExceptionsService } from '../../exceptions/exceptions.service';
 import { AuthUsecases } from '@usecase/auth.usecases';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class AdminJwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'admin-jwt-refresh-token') {
   constructor(
     @Inject('AuthUsecasesProxy')
     private readonly authUsecasesProxy: UseCaseProxy<AuthUsecases>,
@@ -16,17 +17,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.JWT_SECRET,
+      secretOrKey: process.env.JWT_REFRESH_TOKEN_SECRET,
       passReqToCallback: true,
     });
   }
 
-  async validate(@Req() request: any, payload: any) {
-    console.log(123, payload);
-    const user = await this.authUsecasesProxy.getInstance().validateUserForJWTStrategy(payload.email);
-    const accessToken = request.headers['authorization'].replace('Bearer ', '');
-    if (!user || payload.type !== 'user' || user.access_token !== accessToken) {
-      this.logger.warn('JwtStrategy', `User not found`);
+  async validate(request: Request, payload: any) {
+    const user = await this.authUsecasesProxy.getInstance().validateAdminForJWTStrategy(payload.email);
+    const refreshToken = request.headers['authorization'].replace('Bearer ', '');
+    if (!user || payload.type !== 'admin' || user.refresh_token !== refreshToken) {
+      this.logger.warn('JwtStrategy', `Admin not found`);
       this.exceptionService.unauthorizedException({ message: 'Your login session has expired.' });
     }
     return user;

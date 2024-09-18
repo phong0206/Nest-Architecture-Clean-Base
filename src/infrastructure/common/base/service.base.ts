@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { BaseEntity } from './base.entity';
-import {
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { extend } from 'lodash';
 import {
   DeepPartial,
@@ -21,9 +18,7 @@ import { AbstractBaseService } from './interface.base';
  * BaseService is a class including methods to CRUD db. it is extended by another class.
  * @template T data type of record
  */
-export abstract class BaseService<
-  T extends BaseEntity,
-> extends AbstractBaseService<T> {
+export abstract class BaseService<T extends BaseEntity> extends AbstractBaseService<T> {
   abstract notFoundMessage: string;
 
   constructor(private readonly repository: Repository<T>) {
@@ -52,8 +47,7 @@ export abstract class BaseService<
   }
 
   getOne(options: FindOptions<T>): Promise<T | null> {
-    const { relations, loadEagerRelations, order, withDeleted, select, where } =
-      options;
+    const { relations, loadEagerRelations, order, withDeleted, select, where } = options;
     return this.repository.findOne({
       where,
       relations,
@@ -77,20 +71,14 @@ export abstract class BaseService<
     return this.getOne({ ...options, where });
   }
 
-  async getOneByIdOrFail(
-    id: number,
-    options?: Partial<FindOrFailOptions<T>>,
-  ): Promise<T> {
+  async getOneByIdOrFail(id: number, options?: Partial<FindOrFailOptions<T>>): Promise<T> {
     const errorMessage = options?.errorMessage || this.notFoundMessage;
     const entity = await this.getOneById(id, options);
     if (!entity) throw new NotFoundException(errorMessage);
     return entity;
   }
 
-  async getOneOrCreate(
-    options: FindOptions<T>,
-    data?: DeepPartial<T>,
-  ): Promise<T> {
+  async getOneOrCreate(options: FindOptions<T>, data?: DeepPartial<T>): Promise<T> {
     const entity = await this.getOne(options);
     if (!entity) {
       if (!data) {
@@ -102,8 +90,7 @@ export abstract class BaseService<
   }
 
   getAll(options: Partial<FindManyOptions<T>>): Promise<T[]> {
-    const { relations, order, loadEagerRelations, withDeleted, select, take } =
-      options;
+    const { relations, order, loadEagerRelations, withDeleted, select, take } = options;
     const where = options.where;
     return this.repository.find({
       where,
@@ -116,9 +103,7 @@ export abstract class BaseService<
     });
   }
 
-  async getAllPaginated(
-    options: FindPaginatedOptions<T>,
-  ): Promise<IPaginationResponse<T>> {
+  async getAllPaginated(options: FindPaginatedOptions<T>): Promise<IPaginationResponse<T>> {
     const {
       limit,
       page = 1,
@@ -141,8 +126,7 @@ export abstract class BaseService<
       withDeleted,
       select,
     };
-    const [data, total] =
-      await this.repository.findAndCount(findAndCountOptions);
+    const [data, total] = await this.repository.findAndCount(findAndCountOptions);
 
     return {
       data,
@@ -154,20 +138,13 @@ export abstract class BaseService<
     };
   }
 
-  async update(
-    options: FindOrFailOptions<T>,
-    data: QueryDeepPartialEntity<T>,
-  ): Promise<T> {
+  async update(options: FindOrFailOptions<T>, data: QueryDeepPartialEntity<T>): Promise<T> {
     const entity = await this.getOneOrFail(options);
     const newEntity = extend<T>(entity, data);
     return newEntity.save();
   }
 
-  async updateById(
-    id: number,
-    data: QueryDeepPartialEntity<T>,
-    options?: Partial<FindOrFailOptions<T>>,
-  ): Promise<T> {
+  async updateById(id: number, data: QueryDeepPartialEntity<T>, options?: Partial<FindOrFailOptions<T>>): Promise<T> {
     const entity = await this.getOneByIdOrFail(id, options);
     const newEntity = extend<T>(entity, data);
     return newEntity.save();
@@ -178,23 +155,11 @@ export abstract class BaseService<
     return this.repository.remove(entity);
   }
 
-  async deleteMany(
-    options:
-      | string
-      | string[]
-      | number
-      | number[]
-      | Date
-      | Date[]
-      | FindOptionsWhere<T>,
-  ) {
+  async deleteMany(options: string | string[] | number | number[] | Date | Date[] | FindOptionsWhere<T>) {
     return this.repository.delete(options);
   }
 
-  async removeById(
-    id: number,
-    options?: Partial<FindOrFailOptions<T>>,
-  ): Promise<T> {
+  async removeById(id: number, options?: Partial<FindOrFailOptions<T>>): Promise<T> {
     const entity = await this.getOneByIdOrFail(id, options);
     return this.repository.remove(entity);
   }
@@ -213,10 +178,7 @@ export abstract class BaseService<
     return this.repository.softRemove(entities);
   }
 
-  async softRemoveById(
-    id: number,
-    options?: Partial<FindOrFailOptions<T>>,
-  ): Promise<T> {
+  async softRemoveById(id: number, options?: Partial<FindOrFailOptions<T>>): Promise<T> {
     const entity = await this.getOneByIdOrFail(id, options);
     return this.repository.softRemove(entity);
   }
@@ -233,19 +195,11 @@ export abstract class BaseService<
     return this.repository.createQueryBuilder(alias);
   }
 
-  increment(
-    where: FindOptionsWhere<T>,
-    field: string,
-    value: number,
-  ): Promise<UpdateResult> {
+  increment(where: FindOptionsWhere<T>, field: string, value: number): Promise<UpdateResult> {
     return this.repository.increment(where, field, value);
   }
 
-  decrement(
-    where: FindOptionsWhere<T>,
-    field: string,
-    value: number,
-  ): Promise<UpdateResult> {
+  decrement(where: FindOptionsWhere<T>, field: string, value: number): Promise<UpdateResult> {
     return this.repository.decrement(where, field, value);
   }
 
@@ -253,15 +207,11 @@ export abstract class BaseService<
     return this.repository.query(queryString, parameters);
   }
 
-  transaction<T>(
-    runInTransaction: (entityManager: EntityManager) => Promise<T>,
-  ) {
+  transaction<T>(runInTransaction: (entityManager: EntityManager) => Promise<T>) {
     return this.repository.manager.transaction(runInTransaction);
   }
 
-  existsBy(
-    where: FindOptionsWhere<T> | FindOptionsWhere<T>[],
-  ): Promise<boolean> {
+  existsBy(where: FindOptionsWhere<T> | FindOptionsWhere<T>[]): Promise<boolean> {
     return this.repository.existsBy(where);
   }
 }
