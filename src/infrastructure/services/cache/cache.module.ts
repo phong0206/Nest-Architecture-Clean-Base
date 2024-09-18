@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import Redis from 'ioredis';
+import Redis, { RedisOptions } from 'ioredis';
 import { ICacheService } from './cache.interface';
 import { CacheService } from './cache.service';
 import { EnvironmentConfigService } from '@config';
@@ -11,12 +11,18 @@ import { EnvironmentConfigService } from '@config';
     {
       provide: 'REDIS',
       useFactory(configService: EnvironmentConfigService) {
-        return new Redis({
+        const redisConfig: RedisOptions = {
           port: configService.getRedisPort(),
           host: configService.getRedisHost(),
-          password: configService.getRedisPassword(),
           keyPrefix: configService.getRedisPrefix(),
-        });
+        };
+
+        const redisPassword = configService.getRedisPassword();
+        if (redisPassword) {
+          redisConfig.password = redisPassword;
+        }
+
+        return new Redis(redisConfig);
       },
       inject: [ConfigService],
     },
