@@ -9,7 +9,7 @@ async function bootstrap() {
 
   const env = process.env.NODE_ENV;
   const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'debug', 'verbose'],
+    logger: ['error', 'debug', 'verbose', 'warn'],
   });
   app.enableCors({
     origin: true,

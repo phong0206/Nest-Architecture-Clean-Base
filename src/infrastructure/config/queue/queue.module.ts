@@ -21,9 +21,8 @@ import { EMAIL_SENDING_QUEUE } from '@common';
     }),
     BullModule.registerQueue({ name: EMAIL_SENDING_QUEUE }),
     MailModule,
-    EnvironmentConfigModule,
   ],
-  providers: [EmailSendingQueueProcessor, EmailSendingQueueService],
+  providers: [EmailSendingQueueService],
   exports: [EmailSendingQueueService],
 })
 export class QueueModule {}

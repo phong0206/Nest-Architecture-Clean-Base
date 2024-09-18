@@ -3,12 +3,12 @@ import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } fr
 import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 import SMTPConnection from 'nodemailer/lib/smtp-connection';
-import { MailService } from 'src/infrastructure/services/mail/mail.service';
+import { IMailService } from 'src/infrastructure/services/mail/mail.interface';
 
 @Processor(EMAIL_SENDING_QUEUE)
 export class EmailSendingQueueProcessor {
   private readonly logger = new Logger(EmailSendingQueueProcessor.name);
-  constructor(private readonly mailService: MailService) {}
+  constructor(private readonly mailService: IMailService) {}
   @OnQueueActive()
   public onActive(job: Job) {
     this.logger.debug(`Processing job ${job.id} of type ${job.name}`);
