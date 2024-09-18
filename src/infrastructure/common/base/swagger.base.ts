@@ -245,5 +245,5 @@ export const ApiHideController = () => applyDecorators(ApiExcludeController(proc
  * Swagger for controller
  * @example ApiController()
  */
-export const ApiController = (name: string, $ref: Function[]) =>
+export const ApiController = (name: string, $ref: Function[] | undefined) =>
   applyDecorators(ApiHideController(), ApiTags(`${name} API`), Controller('name'), ApiExtraModels(...$ref));
