@@ -16,7 +16,7 @@ import { QueueModule } from './infrastructure/config/queue/queue.module';
 
 @Module({
   imports: [
-    ...(process.env.NODE_ENV === 'local'
+    ...(process.env.DEFAULT_STORAGE === 'local'
       ? [
           ServeStaticModule.forRoot({
             rootPath: join(__dirname, '../..', 'storage'),

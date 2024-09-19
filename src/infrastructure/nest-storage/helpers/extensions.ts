@@ -13,3 +13,10 @@ export const getMimeFromExtension = (fileName: string): string => {
 
   return '';
 };
+
+export function getPathStorage(): string {
+  if (process.env.DEFAULT_STORAGE === 'local') {
+    return 'upload-files/';
+  }
+  return process.env.S3_STORAGE_BASE_PATH + '/';
+}
