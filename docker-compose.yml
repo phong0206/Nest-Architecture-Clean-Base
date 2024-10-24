@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3'
 
 services:
   db:
@@ -23,6 +23,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    networks:
+      - app-network
 
   app:
     build:
@@ -67,3 +69,4 @@ services:
 networks:
   app-network:
     driver: bridge
+    external: true

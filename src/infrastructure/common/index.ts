@@ -33,3 +33,4 @@ export * from './strategies/adminJwtRefresh.strategy';
 
 export * from './constants/csv.constant';
 export * from './constants/queue.const';
+export * from './constants/image.const';

@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { AbstractBaseService } from './interface.base';
+import { applyLikeFilter } from '../helpers/pagination.helper';
 
 /**
  * BaseService is a class including methods to CRUD db. it is extended by another class.
@@ -107,13 +108,14 @@ export abstract class BaseService<T extends BaseEntity> extends AbstractBaseServ
     const {
       limit,
       page = 1,
-      where = { ...options.where, ...options.filter },
+      where = applyLikeFilter(options.filter),
       select,
       withDeleted,
       loadEagerRelations,
       order,
       relations,
     } = options;
+
     const take = limit === undefined || limit <= 0 ? undefined : limit;
     const skip = take === undefined ? undefined : take * (+page - 1);
     const findAndCountOptions = {

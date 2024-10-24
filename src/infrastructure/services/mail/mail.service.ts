@@ -5,6 +5,7 @@ import { ExceptionsService } from 'src/infrastructure/exceptions/exceptions.serv
 import SMTPConnection from 'nodemailer/lib/smtp-connection';
 import { createTransport, SentMessageInfo } from 'nodemailer';
 import { LoggerService } from 'src/infrastructure/logger/logger.service';
+import { promises as fs } from 'fs';
 
 @Injectable()
 export class MailService extends IMailService {
@@ -16,14 +17,19 @@ export class MailService extends IMailService {
     super();
   }
 
-  async sendMailSES(options: MailOptions): Promise<SentMessageInfo> {
+  async sendMail(options: MailOptions): Promise<SentMessageInfo> {
     try {
       const { templateHtmlPath, html, ...mailOptions } = options;
-      const emailHtml = templateHtmlPath ? await this.readTemplate(templateHtmlPath) : html;
-
+      let content;
+      if (templateHtmlPath) {
+        const emailHtml = await this.readTemplate(
+          process.cwd() + '/src/infrastructure/services/mail/templates/' + templateHtmlPath,
+        );
+        content = this.replaceTemplateVariables(emailHtml, options.context);
+      }
       return this.mailerService.sendMail({
         ...mailOptions,
-        html: emailHtml,
+        html: content || html,
       });
     } catch (error) {
       this.logger.error(`Failed to send mail: ${options.subject}`, error.stack);
@@ -35,11 +41,15 @@ export class MailService extends IMailService {
     try {
       const transporter = createTransport(mailConfig);
       const { templateHtmlPath, html, ...mailOptions } = options;
-      const emailHtml = templateHtmlPath ? await this.readTemplate(templateHtmlPath) : html;
+      let content;
 
+      if (templateHtmlPath) {
+        const emailHtml = await this.readTemplate(templateHtmlPath);
+        content = this.replaceTemplateVariables(emailHtml, options.context);
+      }
       return transporter.sendMail({
         ...mailOptions,
-        html: emailHtml,
+        html: content || html,
       });
     } catch (error) {
       this.logger.error(`Failed to send mail: ${options?.subject}`, error.stack);
@@ -48,7 +58,18 @@ export class MailService extends IMailService {
   }
 
   private async readTemplate(path: string): Promise<string> {
-    const fs = require('fs').promises;
-    return fs.readFile(path, 'utf8');
+    try {
+      const template = await fs.readFile(path, 'utf8');
+      return template;
+    } catch (err) {
+      console.error(`Error reading template file at ${path}:`, err);
+      throw new Error('Could not read template file.');
+    }
+  }
+
+  private replaceTemplateVariables(template: string, data: Record<string, string>): string {
+    return Object.keys(data).reduce((result, key) => {
+      return result.replace(new RegExp(`{${key}}`, 'g'), data[key]);
+    }, template);
   }
 }

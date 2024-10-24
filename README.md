@@ -87,25 +87,31 @@ cp .env.example .env
 
 _note: Please fill in the necessary environment variables in the `.env` file._
 
-#### 3. Build the application
+#### 3. Create network container
 
 ```console
-docker-compose build
+docker network create app-network
+```
+
+#### 4. Build the application
+
+```console
+docker compose build
 ```
 
 ### Run up app container service
 
 ```console
-docker-compose up
+docker compose up
 ```
 
 ## App Server
 
-Open http://localhost:3000
+Open http://[ip_network_container_api]:8080
 
 ## API Documentation
 
-Open http://localhost:3000/api
+Open http://[ip_network_container_api]:8080/api
 
 ### Commands
 

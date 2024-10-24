@@ -6,10 +6,10 @@ export abstract class IMailService {
    * @param options
    * @return Promise<SentMessageInfo>
    * @example options = {templateHtmlPath: './templates/example.html',...}
-   * @example this.mailService.sendMailSES(options);
+   * @example this.mailService.sendMail(options);
    */
 
-  abstract sendMailSES(options: MailOptions): Promise<SentMessageInfo>;
+  abstract sendMail(options: MailOptions): Promise<SentMessageInfo>;
 
   /**
    * @param mailConfig

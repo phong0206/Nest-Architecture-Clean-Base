@@ -1,5 +1,5 @@
 import { PaginationDto } from '../base/dto.base';
-import { Like } from 'typeorm';
+import { ILike } from 'typeorm';
 
 export function paginationHelper<T>(array: T[], paginationDto: PaginationDto): IPaginationResponse<T> {
   const limit = +(paginationDto.limit || 10);
@@ -16,14 +16,26 @@ export function paginationHelper<T>(array: T[], paginationDto: PaginationDto): I
   };
 }
 
-export function applyLikeFilter(where: Record<string, any>): Record<string, any> {
-  if (!where) return {};
-  return Object.keys(where).reduce((acc, key) => {
-    if (/id/.test(key) && key !== 'staff_id') {
-      acc[key] = where[key];
+function processObject(obj: any): any {
+  return Object.keys(obj).reduce((acc, key) => {
+    const value = obj[key];
+    if (typeof value === 'object' && value !== null) {
+      acc[key] = processObject(value);
+    } else if (typeof value !== 'symbol' && !/id/.test(key)) {
+      acc[key] = ILike(`%${value}%`);
     } else {
-      acc[key] = Like(`%${where[key]}%`);
+      acc[key] = value;
     }
     return acc;
   }, {});
+}
+
+export function applyLikeFilter(where: Record<string, any | any[]>): Record<string, any | any[]> {
+  if (!where) {
+    return {};
+  } else if (Array.isArray(where)) {
+    return where.map((param) => processObject(param));
+  } else {
+    return processObject(where);
+  }
 }

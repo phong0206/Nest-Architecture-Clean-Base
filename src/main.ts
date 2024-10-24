@@ -3,14 +3,18 @@ import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { useSwagger } from './app.swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
   const env = process.env.NODE_ENV;
-  const app = await NestFactory.create(AppModule, {
+  const port = process.env.PORT;
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: ['error', 'debug', 'verbose', 'warn'],
   });
+
   app.enableCors({
     origin: true,
     credentials: true,
@@ -29,9 +33,9 @@ async function bootstrap() {
     await useSwagger(app);
   }
 
-  await app.listen(3000).then(async () => {
+  await app.listen(port).then(async () => {
     const url = await app.getUrl();
-    logger.debug(`Your app is running on port ${3000}`);
+    logger.debug(`Your app is running on port ${port}`);
     logger.debug(`Environment: ${env}`);
     logger.debug(`Documentation ${url}/api`);
   });

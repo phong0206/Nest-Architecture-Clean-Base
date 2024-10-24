@@ -6,10 +6,12 @@ import { User } from '@entity/user.entity';
 import { Admin } from '@entity/admin.entity';
 import { ExceptionsModule } from '../exceptions/exceptions.module';
 import { DatabaseAdminRepository } from './admin.repository';
+import { ImageUpload } from '@entity/image.entity';
+import { DatabaseImageUploadRepository } from './image.repository';
 
 @Module({
-  imports: [TypeOrmConfigModule, TypeOrmModule.forFeature([User, Admin]), ExceptionsModule],
-  providers: [DatabaseUserRepository, DatabaseAdminRepository],
-  exports: [DatabaseUserRepository, DatabaseAdminRepository],
+  imports: [TypeOrmConfigModule, TypeOrmModule.forFeature([User, Admin, ImageUpload]), ExceptionsModule],
+  providers: [DatabaseUserRepository, DatabaseAdminRepository, DatabaseImageUploadRepository],
+  exports: [DatabaseUserRepository, DatabaseAdminRepository, DatabaseImageUploadRepository],
 })
 export class RepositoriesModule {}
